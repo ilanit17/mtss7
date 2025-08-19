@@ -1,7 +1,15 @@
 import { GoogleGenAI, GenerateContentResponse, Type } from "@google/genai";
 import { AnalysisData, FinalIssue, GeneratedIssue, Insight } from '../types';
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Use import.meta.env for client-side Vite environment variables
+// The variable MUST be prefixed with VITE_ to be exposed to the client.
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+
+if (!apiKey) {
+    console.error("VITE_GEMINI_API_KEY environment variable not set.");
+}
+
+const ai = new GoogleGenAI({ apiKey: apiKey });
 
 const generateContentWithRetry = async (request: any, retries = 3, delay = 1000) => {
     try {
